@@ -13,11 +13,31 @@
             <h1 class="text-3xl text-black font-bold">
                 Devstagram
             </h1>
-
+            @auth
             <nav class="flex gap-2 items-center">
-                <a class="font-bold text-gray-600" cls href="#">Login</a>
+                <a class="font-bold text-gray-600" cls href="#">
+                    Hola: <span>{{auth()->user()->username}}</span>
+                </a>
+
+                <form action="{{route('logout')}}" method="POST">
+                    @csrf
+                    <button type="submit" class="font-bold text-gray-600">
+                        Cerrar Sesión
+                    </button>
+                </form>
+                
+
+            </nav>
+            @endauth
+
+            @guest
+            <nav class="flex gap-2 items-center">
+                <a class="font-bold text-gray-600" cls href="{{ route('login')}}">Login</a>
                 <a class="font-bold text-gray-600" href="{{ route('register')}}">Crear Cuenta</a>
             </nav>
+            @endguest
+
+
         </div>
     </header>
     <main class="container mx-auto mt-10">

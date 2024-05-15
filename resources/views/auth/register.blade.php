@@ -56,7 +56,7 @@ Registrate en Devstagram
                     id="email"
                     placeholder="Tu correo electronico" 
                     class="border p-3 w-full rounded-lg"/>
-                    @error('username')
+                    @error('email')
                         <p class="text-red-500">*  {{ $message}}</p>
                     @enderror
                 </div>

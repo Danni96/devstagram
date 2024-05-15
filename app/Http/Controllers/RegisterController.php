@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Validation\ValidatesRequests; // Agrega esta línea
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Validation\ValidatesRequests; // Agrega esta línea
 
 class RegisterController extends Controller
 {
@@ -14,12 +16,36 @@ class RegisterController extends Controller
     }
     
     public function store(Request $request) {
+
+
+        $request->request->add(['username' => Str::slug($request->username)]);
+
         $this->validate($request, [
             'name' => 'required|min:3',
-            'email' => 'required|min:5',
-            'username' => 'required|min:5',
-            'password' => 'required|min:5',
-            'password_confirmation' => 'required|min:5',
+            'username' => 'required|unique:users',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:6',
         ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' =>  $request->password,
+        ]);
+
+
+        // autenticar usuario
+
+        auth()->attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+
+        // otra forma de autenticar
+        // auth()->attempt($request->only('email', 'password'));
+
+        return redirect()->route('posts.index');
     }
 }
+
